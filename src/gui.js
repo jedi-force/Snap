@@ -4809,8 +4809,7 @@ IDE_Morph.prototype.projectMenu = function () {
         localize(graphicsName) + '...',
         () => {
             if (location.protocol === 'file:') {
-                //this.importLocalFile();
-                this.importMedia('Costumes')
+                this.importLocalFile();
                 return;
             }
             this.importMedia(graphicsName);
@@ -4904,7 +4903,8 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
         items.push({
             fileName: parts[0],
             name: parts[1],
-            description: parts.length > 2 ? parts[2] : ''
+            description: parts.length > 2 ? parts[2] : '',
+            category: parts[3]
         });
     });
 
@@ -4963,7 +4963,7 @@ IDE_Morph.prototype.importMedia = function (folderName) {
     );
 
 };
-
+// vic may need to edit for custome menu
 IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     // private - this gets called by importMedia() and creates
     // the actual dialog
@@ -5044,15 +5044,17 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
 
    //parseResourceFile??
     // This is where the meat is:
- 
+    // vic may need to edit for costume
     if (folderName === 'Costumes') {
-        categories = [...new Set(items.map(item => item.description))].sort();
+        categories = [...new Set(items.map(item => item.category))].sort();
+        console.log(categories)
+        console.log(items.filter(item => item.category === categories))
         // Create buttons for each category, and for the first one do:
-        this.createMediaThumbnails(
-            folderName,
-            items.filter(item => item.description === category),
-            dialog
-        );
+        //this.createMediaThumbnails(
+        //    folderName,
+        //    items.filter(item => item.description === categories),
+        //    dialog
+        //);
         // The buttons will also need to have this ↑ as an action
         // As an example, see the project dialog (forgot where it is, sorry!)
     } else {
@@ -5073,6 +5075,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     
     IDE_Morph.prototype.createMediaThumbnails = function (folderName, items, dialog) {
         var turtle = new SymbolMorph('turtle', 60);
+    }
     
 
     items.forEach(item => {
@@ -5133,7 +5136,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             img.src = url;
         }
     });
-};
+
     dialog.popUp(world);
     dialog.setExtent(new Point(400, 300));
     dialog.setCenter(world.center());
