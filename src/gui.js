@@ -4904,7 +4904,7 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
             fileName: parts[0],
             name: parts[1],
             description: parts.length > 2 ? parts[2] : '',
-            category: parts[3]
+            category: parts[2]
         });
     });
 
@@ -4974,6 +4974,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         myself = this,
         world = this.world(),
         categories = [],
+        filteredItems = [],
+        label = "person",
         handle;
 
     frame.acceptsDrops = false;
@@ -4993,6 +4995,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
                     selectedIcon.object.copy().audio,
                     selectedIcon.labelString
                 );
+           // } else if (categories.includes(selectedIcon)) {
+            //        this.loadCategory(selectedIcon);
             } else if (selectedIcon.object instanceof SVG_Costume) {
                 myself.droppedSVG(
                     selectedIcon.object.contents,
@@ -5002,11 +5006,17 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
                 myself.droppedImage(
                     selectedIcon.object.contents,
                     selectedIcon.labelString
-                );
+                ); 
             }
         }
     };
 
+    dialog.loadCategory = function () {
+    
+        filteredItems = items.filter(item => item.category === label)
+        console.log(filteredItems)
+        console.log(label)
+    };
     dialog.fixLayout = function () {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
             x = 0,
@@ -5042,19 +5052,41 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.addShadow();
     };
 
+    IDE_Morph.prototype.createMediaThumbnails = function (folderName, labels, dialog) {
+        var turtle = new SymbolMorph('turtle', 60);
+        
+        labels.forEach(label => {
+            //dialog.addButton(label, label, true)
+            dialog.addButton("loadCategory", label, true)
+            //dialog.addButton(this.loadCategory(label), label, true)
+        });
+    }
+
+   // IDE_Morph.prototype.loadCategory = function (label, items) {
+   //     var i = items.filter(item => item.category === label);
+   //     this.selectedIcon = label;
+   //     console.log(this.selectedIcon)
+   //     console.log(i.length)
+   //     return i;
+   // }
+
    //parseResourceFile??
     // This is where the meat is:
     // vic may need to edit for costume
     if (folderName === 'Costumes') {
+        list = []
+        //categories = [...new Set(items.map(item => (item.category, list.push(item))))].sort();
         categories = [...new Set(items.map(item => item.category))].sort();
-        console.log(categories)
-        console.log(items.filter(item => item.category === categories))
+        //console.log(items.filter(item => item.category === categories));
+        //console.log(items.filter(item => item.description === categories));
         // Create buttons for each category, and for the first one do:
-        //this.createMediaThumbnails(
-        //    folderName,
-        //    items.filter(item => item.description === categories),
-        //    dialog
-        //);
+        this.createMediaThumbnails(
+            folderName,
+            //items.filter(item => item.description === categories),
+            categories,
+            dialog
+            //new DialogBoxMorph(this, categories, this)
+        );
         // The buttons will also need to have this ↑ as an action
         // As an example, see the project dialog (forgot where it is, sorry!)
     } else {
@@ -5072,70 +5104,118 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             dialog.corner
         );
     };
-    
-    IDE_Morph.prototype.createMediaThumbnails = function (folderName, items, dialog) {
-        var turtle = new SymbolMorph('turtle', 60);
-    }
-    
 
-    items.forEach(item => {
-        // Caution: creating very many thumbnails can take a long time!
-        var url = this.resourceURL(folderName, item.fileName),
-            img = new Image(),
-            suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
-            isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
-            isSound = contains(['wav', 'mp3'], suffix),
-            icon;
+    //if (categories.includes(this.selectedIcon)) {
+    //    items =  items.filter(item => item.category ===);
+    //    console.log(selectedIcon)
+    //    console.log(items.length)
+    //};
+    if (folderName != 'Costumes') {
+        items.forEach(item => {
+            // Caution: creating very many thumbnails can take a long time!
+            var url = this.resourceURL(folderName, item.fileName),
+                img = new Image(),
+                suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
+                isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
+                isSound = contains(['wav', 'mp3'], suffix),
+                icon;
 
-        if (isSound) {
-            icon = new SoundIconMorph(new Sound(new Audio(), item.name));
-        } else {
+            if (isSound) {
+                icon = new SoundIconMorph(new Sound(new Audio(), item.name));
+            } else {
+                icon = new CostumeIconMorph(
+                    new Costume(turtle.getImage(), item.name)
+                );
+            }
+            icon.isDraggable = false;
+            icon.userMenu = nop;
+            icon.action = function () {
+                if (selectedIcon === icon) {return; }
+                var prevSelected = selectedIcon;
+                selectedIcon = icon;
+                if (prevSelected) {prevSelected.refresh(); }
+            };
+            icon.doubleClickAction = dialog.ok;
+            icon.query = function () {
+                return icon === selectedIcon;
+            };
+            frame.addContents(icon);
+            if (isSound) {
+                icon.object.audio.onloadeddata = function () {
+                    icon.createThumbnail();
+                    icon.fixLayout();
+                    icon.refresh();
+                };
+
+                icon.object.audio.src = url;
+                icon.object.audio.load();
+            } else if (isSVG) {
+                img.onload = function () {
+                    icon.object = new SVG_Costume(img, item.name);
+                    icon.refresh();
+                };
+                this.getURL(
+                    url,
+                    txt => img.src = 'data:image/svg+xml;base64,' +
+                        window.btoa(txt)
+                );
+            } else {
+                img.onload = function () {
+                    var canvas = newCanvas(new Point(img.width, img.height), true);
+                    canvas.getContext('2d').drawImage(img, 0, 0);
+                    icon.object = new Costume(canvas, item.name);
+                    icon.refresh();
+                };
+                img.src = url;
+            }
+        });
+    } else {
+        filteredItems.forEach(item => {
+            // Caution: creating very many thumbnails can take a long time!
+            var url = this.resourceURL(folderName, item.fileName),
+                img = new Image(),
+                suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
+                isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
+                icon;
+
             icon = new CostumeIconMorph(
                 new Costume(turtle.getImage(), item.name)
             );
-        }
-        icon.isDraggable = false;
-        icon.userMenu = nop;
-        icon.action = function () {
-            if (selectedIcon === icon) {return; }
-            var prevSelected = selectedIcon;
-            selectedIcon = icon;
-            if (prevSelected) {prevSelected.refresh(); }
-        };
-        icon.doubleClickAction = dialog.ok;
-        icon.query = function () {
-            return icon === selectedIcon;
-        };
-        frame.addContents(icon);
-        if (isSound) {
-            icon.object.audio.onloadeddata = function () {
-                icon.createThumbnail();
-                icon.fixLayout();
-                icon.refresh();
+            
+            icon.isDraggable = false;
+            icon.userMenu = nop;
+            icon.action = function () {
+                if (selectedIcon === icon) {return; }
+                var prevSelected = selectedIcon;
+                selectedIcon = icon;
+                if (prevSelected) {prevSelected.refresh(); }
             };
-
-            icon.object.audio.src = url;
-            icon.object.audio.load();
-        } else if (isSVG) {
-            img.onload = function () {
-                icon.object = new SVG_Costume(img, item.name);
-                icon.refresh();
+            icon.doubleClickAction = dialog.ok;
+            icon.query = function () {
+                return icon === selectedIcon;
             };
-            this.getURL(
-                url,
-                txt => img.src = 'data:image/svg+xml;base64,' +
-                    window.btoa(txt)
-            );
-        } else {
-            img.onload = function () {
-                var canvas = newCanvas(new Point(img.width, img.height), true);
-                canvas.getContext('2d').drawImage(img, 0, 0);
-                icon.object = new Costume(canvas, item.name);
-                icon.refresh();
-            };
-            img.src = url;
-        }
-    });
+            frame.addContents(icon);
+            if (isSVG) {
+                img.onload = function () {
+                    icon.object = new SVG_Costume(img, item.name);
+                    icon.refresh();
+                };
+                this.getURL(
+                    url,
+                    txt => img.src = 'data:image/svg+xml;base64,' +
+                        window.btoa(txt)
+                );
+            } else {
+                img.onload = function () {
+                    var canvas = newCanvas(new Point(img.width, img.height), true);
+                    canvas.getContext('2d').drawImage(img, 0, 0);
+                    icon.object = new Costume(canvas, item.name);
+                    icon.refresh();
+                };
+                img.src = url;
+            }
+        });
+    }
 
     dialog.popUp(world);
     dialog.setExtent(new Point(400, 300));
@@ -5422,6 +5502,11 @@ IDE_Morph.prototype.scenesMenu = function () {
     );
     menu.popup(world, pos);
 };
+
+//DialogBoxMorph.prototype.loadCategory = function (label, items) {
+//    this.button.trigger()
+//    return items.filter(item => item.category === label);
+//}
 
 IDE_Morph.prototype.editNotes = function () {
     var dialog = new DialogBoxMorph().withKey('notes'),
@@ -8149,6 +8234,7 @@ ProjectDialogMorph.uber = DialogBoxMorph.prototype;
 function ProjectDialogMorph(ide, label) {
     this.init(ide, label);
 }
+
 
 ProjectDialogMorph.prototype.init = function (ide, task) {
     // additional properties:
