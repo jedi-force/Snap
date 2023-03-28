@@ -4900,6 +4900,7 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
 
         if (parts.length < 2) {return; }
 
+
         items.push({
             fileName: parts[0],
             name: parts[1],
@@ -4963,7 +4964,7 @@ IDE_Morph.prototype.importMedia = function (folderName) {
     );
 
 };
-// vic may need to edit for custome menu
+// vic may need to edit for costume menu
 IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     // private - this gets called by importMedia() and creates
     // the actual dialog
@@ -4973,15 +4974,17 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         turtle = new SymbolMorph('turtle', 60),
         myself = this,
         world = this.world(),
+        categorySelector = new AlignmentMorph('column', this.padding / 2),
         categories = [],
         filteredItems = [],
-        label = "person",
         handle;
 
     frame.acceptsDrops = false;
     frame.contents.acceptsDrops = false;
     frame.color = myself.groupColor;
     frame.fixLayout = nop;
+    frame.add(categorySelector);
+
     dialog.labelString = folderName;
     dialog.createLabel();
     dialog.addBody(frame);
@@ -5070,30 +5073,58 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
                 img.src = url;
             }
         }); 
+    };
+
+    IDE_Morph.prototype.createMediaThumbnails = function (folderName, labels, dialog) {
+        var turtle = new SymbolMorph('turtle', 60);
     }
 
-    dialog.food = function () {
-        filteredItems = items.filter(item => item.category === 'food')
-        this.generateThumbnail(filteredItems)
-        console.log(filteredItems)
-    }
-    dialog.person = function () {
-        filteredItems = items.filter(item => item.category === 'person')
-        console.log(filteredItems)
-        this.generateThumbnail(filteredItems)
-        
-    }
-    dialog.object = function () {
-        filteredItems = items.filter(item => item.category === 'object')
-        console.log(filteredItems)
-        this.generateThumbnail(filteredItems)
-        
-    }
+   //parseResourceFile
+    // This is where the meat is:
+    // vic may need to edit for costume
+    if (folderName === 'Costumes') {
+        //categories = [...new Set(items.map(item => (item.category, list.push(item))))].sort();
+        categories = [...new Set(items.map(item => item.category))].sort();
+        // Create buttons for each category, and for the first one do:
+        // The buttons will also need to have this ↑ as an action
+        // As an example, see the project dialog (forgot where it is, sorry!)
+    }     
+
+    //if (folderName != 'Costumes') {
+    //    this.generateThumbnail(items)
+    //} else {
+    //    if (filteredItems.length === 0) {
+    //        filteredItems = items.filter(item => item.category === 'food')
+    //    }
+    //    this.generateThumbnail(filteredItems)
+    //}
+
+    categories.forEach(category =>  {
+        var button = new ToggleButtonMorph(
+            null,
+            dialog,
+            () => {
+                this.selectedCategory = category;
+                filteredItems = items.filter(item => item.category === category);
+                this.generateThumbnail(filteredItems);
+            },
+            category,
+            () => this.selectedCategory === category,
+            null,
+            null,
+            3
+        );
+        categorySelector.add(button);
+       
+        }
+    );
+    
     dialog.fixLayout = function () {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
             x = 0,
             y = 0,
             fp, fw;
+        categorySelector.fixLayout();
         this.buttons.fixLayout();
         this.body.setPosition(this.position().add(new Point(
             this.padding,
@@ -5124,42 +5155,11 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.addShadow();
     };
 
-    IDE_Morph.prototype.createMediaThumbnails = function (folderName, labels, dialog) {
-        var turtle = new SymbolMorph('turtle', 60);
-        labels.forEach(label => {
-            dialog.addButton(`${label}`, label, true)
-        });
-    }
-
-   //parseResourceFile
-    // This is where the meat is:
-    // vic may need to edit for costume
     if (folderName === 'Costumes') {
-        list = []
-        //categories = [...new Set(items.map(item => (item.category, list.push(item))))].sort();
-        categories = [...new Set(items.map(item => item.category))].sort();
-        // Create buttons for each category, and for the first one do:
-        this.createMediaThumbnails(
-            folderName,
-            //items.filter(item => item.description === categories),
-            categories,
-            dialog
-            //new DialogBoxMorph(this, categories, this)
-        );
-
-        // The buttons will also need to have this ↑ as an action
-        // As an example, see the project dialog (forgot where it is, sorry!)
-    }     
-
-    if (folderName != 'Costumes') {
-        this.generateThumbnail(items)
+        this.generateThumbnail(items.filter(item => item.category === categories[0]));
     } else {
-        console.log(folderName)
-        if (filteredItems.length === 0) {
-            filteredItems = items.filter(item => item.category === 'food')
-        }
-        this.generateThumbnail(filteredItems)
-    }
+        this.generateThumbnail(items);
+    };
 
     
     dialog.popUp(world);
