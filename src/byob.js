@@ -5066,10 +5066,10 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
     this.createLabel();
 
     // build contents
-    this.buildContents();
+    this.buildContents(target);
 };
 
-BlockVisibilityDialogMorph.prototype.buildContents = function () {
+BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
     var palette, x, y, checkBox, lastCat,
         padding = 4;
 
@@ -5127,8 +5127,13 @@ BlockVisibilityDialogMorph.prototype.buildContents = function () {
 
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
-
-    this.setExtent(new Point(220, 300));
+    console.log(target);
+    console.log(this.target);
+    if (target.world().hidePalette != null) {
+        this.bounds = target.world().hidePalette;
+    } else {
+        this.setExtent(new Point(220, 300));
+    }
     this.fixLayout();
 };
 
@@ -5201,6 +5206,7 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
 // BlockVisibilityDialogMorph ops
 
 BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
+    this.parent.hidePalette = this.bounds;
     var ide = this.target.parentThatIsA(IDE_Morph);
     this.blocks.forEach(block => this.target.changeBlockVisibility(
         block,
