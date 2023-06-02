@@ -4899,13 +4899,14 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
         parts = line.split('\t').map(str => str.trim());
 
         if (parts.length < 2) {return; }
-
+        var whitespace = parts[parts.length - 1].split(/[(\t+)|(\s+)]/);
+        console.log(whitespace[whitespace.length - 1])
 
         items.push({
             fileName: parts[0],
             name: parts[1],
             description: parts.length > 2 ? parts[2] : '',
-            category: parts[2]
+            category: whitespace[whitespace.length - 1]
         });
     });
 
@@ -4974,7 +4975,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         turtle = new SymbolMorph('turtle', 60),
         myself = this,
         world = this.world(),
-        categorySelector = new AlignmentMorph('column', this.padding / 2),
+        categorySelector = new AlignmentMorph('row', this.padding),
         categories = [],
         filteredItems = [],
         handle;
@@ -4990,7 +4991,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     dialog.addBody(frame);
     dialog.addButton('ok', 'Import');
     dialog.addButton('cancel', 'Cancel');
-    dialog.selectedCategory = 'food';
+    dialog.selectedCategory = 'accessory';
 
     dialog.ok = function () {
         if (selectedIcon) {
@@ -5077,10 +5078,6 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         }); 
     };
 
-    IDE_Morph.prototype.createMediaThumbnails = function (folderName, labels, dialog) {
-        var turtle = new SymbolMorph('turtle', 60);
-    }
-
    //parseResourceFile
     // This is where the meat is:
     // vic may need to edit for costume
@@ -5112,7 +5109,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             },
             null,
             null,
-            3
+            0
         );
         categorySelector.add(button);
         }
@@ -5120,16 +5117,11 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     
     dialog.selectCategory = function (category, ide) {
         this.selectedCategory = category;
-        frame.contents.children.forEach(previousCostume => {
-            frame.contents.removeChild(previousCostume);
-            console.log('hi');
-            selectedIcon = null;
-        })
+        frame.contents.children = [];
         categorySelector.children.forEach(m => m.refresh());
         frame.fixLayout();
         filteredItems = items.filter(item => item.category === category);
         dialog.generateThumbnail(filteredItems, ide);
-        
         dialog.fixLayout();
         
     }
@@ -5139,9 +5131,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             x = 0,
             y = 0,
             fp, fw;
-    
         categorySelector.fixLayout();
-
         this.body.setPosition(this.position().add(new Point(
             this.padding,
             th + this.padding
@@ -5150,10 +5140,21 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             this.width() - this.padding * 2,
             this.height() - this.padding * 3 - th - this.buttons.height()
         ));
+        
         fp = this.body.position();
         fw = this.body.width();
+
+        categorySelector.children.forEach(function (button) {
+            button.setPosition(fp.add(new Point(x, y)));
+            x += button.width();
+            if (x + button.width() > fw) {
+                x = 0;
+                y += button.height();
+            }
+        });
+
         frame.contents.children.forEach(function (icon) {
-              icon.setPosition(fp.add(new Point(x, y)));
+              icon.setPosition(fp.add(new Point(x, y + 30)));
             x += icon.width();
             if (x + icon.width() > fw) {
                 x = 0;
