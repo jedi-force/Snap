@@ -5076,8 +5076,7 @@ BlockVisibilityDialogMorph.prototype.createCategoryButtons
 BlockVisibilityDialogMorph.prototype.fixCategoriesLayout
     = BlockDialogMorph.prototype.fixCategoriesLayout;
 
-BlockVisibilityDialogMorph.prototype.addCategoryButton
-    = BlockDialogMorph.prototype.addCategoryButton;
+
 
 BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
     var palette, x, y, checkBox, lastCat,
@@ -5104,25 +5103,21 @@ BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
     this.categories.borderColor = this.categories.color.lighter(40);
     this.categories.buttons = [];
 
-    // this.categories.refresh = function () {
-    //     this.buttons.forEach(cat => {
-    //         cat.refresh();
-    //         if (cat.state) {
-    //             cat.scrollIntoView();
-    //         }
-    //     });
-    // };
+    this.categories.refresh = function () {
+        this.buttons.forEach(cat => {
+            cat.refresh();
+            if (cat.state) {
+                cat.scrollIntoView();
+            }
+        });
+    };
 
     this.createCategoryButtons();
     this.fixCategoriesLayout();
     palette.addContents(this.categories);
     this.categories.fixLayout();
-    console.log(this.categories);
-    this.categories.buttons.forEach(category => {
-
-    });
-
     y = this.categories.bounds.corner.y + 5
+    
     this.blocks.forEach(block => {
         if (lastCat && (block.category !== lastCat)) {
             y += padding;
@@ -5188,7 +5183,6 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
         this, // this block dialog box is the target
         () => {
             this.category = category;
-            //this.categories.refresh();
             this.blocks.forEach (block => {
                 if (block.category === category) {
                     function removeItem(value, arr) {
@@ -5196,17 +5190,16 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
                     }
                     currCategory = this.categories.buttons.find(elem => 
                         elem.label.text.toLowerCase() === category)
-                    console.log(currCategory)
-                    console.log(this.categories.buttons[0].label.text)
                     if (!this.selection.includes(block)) {
                         this.selection.push(block);
                         block.parent.refresh();
                     } else {
                         this.selection = removeItem(block, this.selection);
-                        currCategory.userState = 'normal';
+                        currCategory.userState = "normal";
                         block.parent.refresh();
                         currCategory.refresh();
                         currCategory.rerender();
+    
                     }
                 }
             })
@@ -5234,6 +5227,9 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
     this.categories.buttons.push(button);
     return button;
 };
+
+BlockVisibilityDialogMorph.prototype.addCustomCategoryButton
+    = BlockVisibilityDialogMorph.prototype.addCategoryButton;
 
 BlockVisibilityDialogMorph.prototype.popUp
     = BlockExportDialogMorph.prototype.popUp;
