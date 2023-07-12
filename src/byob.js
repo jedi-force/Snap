@@ -5050,6 +5050,7 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
     this.blocks = target.allPaletteBlocks();
     this.selection = this.blocks.filter(each => target.isHidingBlock(each));
     this.handle = null;
+    this.categories = null;
 
     // initialize inherited properties:
     BlockVisibilityDialogMorph.uber.init.call(
@@ -5071,6 +5072,9 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
 
 BlockVisibilityDialogMorph.prototype.createCategoryButtons
     = BlockDialogMorph.prototype.createCategoryButtons;
+
+BlockVisibilityDialogMorph.prototype.fixCategoriesLayout
+    = BlockDialogMorph.prototype.fixCategoriesLayout;
 
 BlockVisibilityDialogMorph.prototype.addCategoryButton
     = BlockDialogMorph.prototype.addCategoryButton;
@@ -5095,8 +5099,30 @@ BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
     x = palette.left() + padding;
     y = palette.top() + padding;
 
-    //this.createCategoryButtons();
+    this.categories = new BoxMorph(); //palette 
+    this.categories.color = SpriteMorph.prototype.paletteColor.lighter(8);
+    this.categories.borderColor = this.categories.color.lighter(40);
+    this.categories.buttons = [];
 
+    // this.categories.refresh = function () {
+    //     this.buttons.forEach(cat => {
+    //         cat.refresh();
+    //         if (cat.state) {
+    //             cat.scrollIntoView();
+    //         }
+    //     });
+    // };
+
+    this.createCategoryButtons();
+    this.fixCategoriesLayout();
+    palette.addContents(this.categories);
+    this.categories.fixLayout();
+    console.log(this.categories);
+    this.categories.buttons.forEach(category => {
+
+    });
+
+    y = this.categories.bounds.corner.y + 5
     this.blocks.forEach(block => {
         if (lastCat && (block.category !== lastCat)) {
             y += padding;
@@ -5145,6 +5171,70 @@ BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
     this.fixLayout();
 };
 
+BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
+    var labelWidth = 75,
+        colors = [
+            IDE_Morph.prototype.frameColor,
+            IDE_Morph.prototype.frameColor.darker
+                (MorphicPreferences.isFlat ? 5 : 50
+            ),
+            SpriteMorph.prototype.blockColorFor(category)
+        ],
+        button;
+
+        //vic added to create a unchecking and checking action for the checkboxes when clicking category
+    button = new ToggleButtonMorph(
+        colors,
+        this, // this block dialog box is the target
+        () => {
+            this.category = category;
+            //this.categories.refresh();
+            this.blocks.forEach (block => {
+                if (block.category === category) {
+                    function removeItem(value, arr) {
+                        return arr.filter(elem => elem != value)
+                    }
+                    currCategory = this.categories.buttons.find(elem => 
+                        elem.label.text.toLowerCase() === category)
+                    console.log(currCategory)
+                    console.log(this.categories.buttons[0].label.text)
+                    if (!this.selection.includes(block)) {
+                        this.selection.push(block);
+                        block.parent.refresh();
+                    } else {
+                        this.selection = removeItem(block, this.selection);
+                        currCategory.userState = 'normal';
+                        block.parent.refresh();
+                        currCategory.refresh();
+                        currCategory.rerender();
+                    }
+                }
+            })
+        },
+        category[0].toUpperCase().concat(category.slice(1)), // UCase label
+        () => this.category === category, // query
+        null, // env
+        null, // hint
+        labelWidth, // minWidth
+        true // has preview
+    );
+
+    button.corner = 8;
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = IDE_Morph.prototype.buttonLabelColor;
+        if (MorphicPreferences.isFlat) {
+            button.labelPressColor = WHITE;
+        }
+    button.contrast = this.buttonContrast;
+    button.fixLayout();
+    button.refresh();
+    this.categories.add(button);
+    this.categories.buttons.push(button);
+    return button;
+};
+
 BlockVisibilityDialogMorph.prototype.popUp
     = BlockExportDialogMorph.prototype.popUp;
 
@@ -5163,7 +5253,9 @@ BlockVisibilityDialogMorph.prototype.userMenu = function () {
 BlockVisibilityDialogMorph.prototype.selectAll = function () {
     this.selection = this.blocks.slice(0);
     this.body.contents.children.forEach(checkBox => {
-        checkBox.refresh();
+        if (!(checkBox instanceof BoxMorph)) {
+            checkBox.refresh();
+        }
     });
 };
 
@@ -5177,7 +5269,9 @@ BlockVisibilityDialogMorph.prototype.selectCategory = function (categ) {
 BlockVisibilityDialogMorph.prototype.selectNone = function () {
     this.selection = [];
     this.body.contents.children.forEach(checkBox => {
-        checkBox.refresh();
+        if (!(checkBox instanceof BoxMorph)) {
+            checkBox.refresh();
+        }
     });
 };
 
@@ -5189,13 +5283,15 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
         uVars = [];
 
     used.forEach(b => {
-        if (b.isCustomBlock) {
-            uCust.push(b.isGlobal ? b.definition
-                : this.target.getMethod(b.semanticSpec));
-        } else if (b.selector === 'reportGetVar') {
-            uVars.push(b.blockSpec);
-        } else {
-            uPrim.push(b.selector);
+        if (!(b instanceof BoxMorph)) {
+            if (b.isCustomBlock) {
+                uCust.push(b.isGlobal ? b.definition
+                    : this.target.getMethod(b.semanticSpec));
+            } else if (b.selector === 'reportGetVar') {
+                uVars.push(b.blockSpec);
+            } else {
+                uPrim.push(b.selector);
+            }
         }
     });
 
@@ -5214,7 +5310,9 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
     });
 
     this.body.contents.children.forEach(checkBox => {
-        checkBox.refresh();
+        if (!(checkBox instanceof BoxMorph)) {
+            checkBox.refresh();
+        }
     });
 };
 
