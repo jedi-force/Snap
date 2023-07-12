@@ -5069,6 +5069,12 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
     this.buildContents(target);
 };
 
+BlockVisibilityDialogMorph.prototype.createCategoryButtons
+    = BlockDialogMorph.prototype.createCategoryButtons;
+
+BlockVisibilityDialogMorph.prototype.addCategoryButton
+    = BlockDialogMorph.prototype.addCategoryButton;
+
 BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
     var palette, x, y, checkBox, lastCat,
         padding = 4;
@@ -5088,6 +5094,8 @@ BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
     // populate palette
     x = palette.left() + padding;
     y = palette.top() + padding;
+
+    //this.createCategoryButtons();
 
     this.blocks.forEach(block => {
         if (lastCat && (block.category !== lastCat)) {
@@ -5159,6 +5167,13 @@ BlockVisibilityDialogMorph.prototype.selectAll = function () {
     });
 };
 
+BlockVisibilityDialogMorph.prototype.selectCategory = function (categ) {
+    this.selection = this.blocks.filter(block => block.category === categ)
+    //this.body.contents.children.forEach(checkBox => {
+    //    checkBox.refresh();
+    //});
+};
+
 BlockVisibilityDialogMorph.prototype.selectNone = function () {
     this.selection = [];
     this.body.contents.children.forEach(checkBox => {
@@ -5206,7 +5221,7 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
 // BlockVisibilityDialogMorph ops
 
 BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
-    this.parent.hidePalette = this.bounds;
+    this.parent.hidePalette = this.bounds; //saving the current hide palette bounds to the world hidePalette variable
     var ide = this.target.parentThatIsA(IDE_Morph);
     this.blocks.forEach(block => this.target.changeBlockVisibility(
         block,
