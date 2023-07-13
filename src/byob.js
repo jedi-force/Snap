@@ -5178,31 +5178,56 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
         button;
 
         //vic added to create a unchecking and checking action for the checkboxes when clicking category
+    this.selectedCategories = [];
     button = new ToggleButtonMorph(
         colors,
         this, // this block dialog box is the target
         () => {
-            this.category = category;
+            function removeItem(value, arr) {
+                return arr.filter(elem => elem != value)
+            }
+            this.category = category
+            currCategory = this.categories.buttons.find(elem => 
+                elem.label.text.toLowerCase() === category)
+
+            // this.category.forEach(categ => {
+            //     currCateg = this.categories.buttons.find(elem => 
+            //         elem.label.text.toLowerCase() === categ)
+            //     currCateg.userState = 'pressed';
+            // });
+
+            // this.categories.refresh();
             this.blocks.forEach (block => {
                 if (block.category === category) {
-                    function removeItem(value, arr) {
-                        return arr.filter(elem => elem != value)
-                    }
-                    currCategory = this.categories.buttons.find(elem => 
-                        elem.label.text.toLowerCase() === category)
-                    if (!this.selection.includes(block)) {
+                    if (!this.selectedCategories.includes(category)) {
                         this.selection.push(block);
                         block.parent.refresh();
                     } else {
                         this.selection = removeItem(block, this.selection);
-                        currCategory.userState = "normal";
+                        currCategory.userState = 'normal';
                         block.parent.refresh();
-                        currCategory.refresh();
-                        currCategory.rerender();
+                        this.category = null;
+                        //currCategory.rerender();
+                        //currCategory.refresh();
+                        
     
                     }
                 }
             })
+            if (!this.selectedCategories.includes(category)) {
+                this.selectedCategories.push(category);
+            } else {
+                this.selectedCategories = removeItem(category, this.selectedCategories);
+            }
+            this.selectedCategories.forEach(categ => {
+                currCateg = this.categories.buttons.find(elem => 
+                    elem.label.text.toLowerCase() === categ)
+                currCateg.userState = 'pressed';
+                this.category = categ;
+                });
+            //currCategory.userState = 'normal';
+            //this.categories.rerender();
+            //this.categories.refresh();
         },
         category[0].toUpperCase().concat(category.slice(1)), // UCase label
         () => this.category === category, // query
@@ -5211,7 +5236,6 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
         labelWidth, // minWidth
         true // has preview
     );
-
     button.corner = 8;
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
