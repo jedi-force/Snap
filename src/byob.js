@@ -5228,6 +5228,7 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
                 currCateg.userState = 'pressed';
                 this.category = categ;
             });
+            this.parent.hidePalette = this;
             //currCategory.userState = 'normal';
             //this.categories.rerender();
             //this.categories.refresh();
