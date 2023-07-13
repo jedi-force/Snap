@@ -5051,6 +5051,8 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
     this.selection = this.blocks.filter(each => target.isHidingBlock(each));
     this.handle = null;
     this.categories = null;
+    this.selectedCategories = [];
+    this.category = null;
 
     // initialize inherited properties:
     BlockVisibilityDialogMorph.uber.init.call(
@@ -5059,7 +5061,15 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
         () => this.hideBlocks(),
         null // environment
     );
-
+    if (target.world().hidePalette != null) {
+        this.categories = target.world().hidePalette.categories;
+        this.category = target.world().hidePalette.category;
+        this.selectedCategories = target.world().hidePalette.selectedCategories;
+        this.bounds = target.world().hidePalette.bounds;
+    } else {
+        target.world().hidePalette = this;
+        this.setExtent(new Point(220, 300))
+    }
     // override inherited properites:
     this.labelString = localize('Hide blocks in palette')
         + (name ? ': ' : '')
@@ -5156,13 +5166,6 @@ BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
 
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
-    console.log(target);
-    console.log(this.target);
-    if (target.world().hidePalette != null) {
-        this.bounds = target.world().hidePalette;
-    } else {
-        this.setExtent(new Point(220, 300));
-    }
     this.fixLayout();
 };
 
@@ -5178,7 +5181,7 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
         button;
 
         //vic added to create a unchecking and checking action for the checkboxes when clicking category
-    this.selectedCategories = [];
+
     button = new ToggleButtonMorph(
         colors,
         this, // this block dialog box is the target
@@ -5224,7 +5227,7 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
                     elem.label.text.toLowerCase() === categ)
                 currCateg.userState = 'pressed';
                 this.category = categ;
-                });
+            });
             //currCategory.userState = 'normal';
             //this.categories.rerender();
             //this.categories.refresh();
@@ -5255,8 +5258,27 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
 BlockVisibilityDialogMorph.prototype.addCustomCategoryButton
     = BlockVisibilityDialogMorph.prototype.addCategoryButton;
 
-BlockVisibilityDialogMorph.prototype.popUp
-    = BlockExportDialogMorph.prototype.popUp;
+BlockVisibilityDialogMorph.prototype.popUp = function (wrrld) {
+
+    var world = wrrld || this.target.world();
+    if (world) {
+        BlockExportDialogMorph.uber.popUp.call(this, world);
+        
+        this.handle = new HandleMorph(
+            this,
+            200,
+            220,
+            this.corner,
+            this.corner
+        );
+        this.selectedCategories.forEach(categ => {
+            currCateg = this.categories.buttons.find(elem => 
+                elem.label.text.toLowerCase() === categ)
+            currCateg.userState = 'pressed';
+            this.category = categ;
+        });
+    }
+};
 
 // BlockVisibilityDialogMorph menu
 
@@ -5339,7 +5361,7 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
 // BlockVisibilityDialogMorph ops
 
 BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
-    this.parent.hidePalette = this.bounds; //saving the current hide palette bounds to the world hidePalette variable
+    //this.parent.hidePalette.bounds = this.bounds; //saving the current hide palette bounds to the world hidePalette variable
     var ide = this.target.parentThatIsA(IDE_Morph);
     this.blocks.forEach(block => this.target.changeBlockVisibility(
         block,
