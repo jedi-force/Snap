@@ -5175,6 +5175,11 @@ BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
     this.fixLayout();
 };
 
+BlockVisibilityDialogMorph.prototype.ok = function () {
+    this.accept();
+    this.world().hidePalette = this
+}
+
 BlockVisibilityDialogMorph.prototype.removeItem = function (value, arr) {
     return arr.filter(elem => elem != value)
 }
@@ -5236,7 +5241,6 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
                 currCateg.userState = 'pressed';
                 this.category = categ;
             });
-            this.parent.hidePalette = this;
             //currCategory.userState = 'normal';
             //this.categories.rerender();
             //this.categories.refresh();
@@ -5371,6 +5375,9 @@ BlockVisibilityDialogMorph.prototype.selectNone = function () {
             checkBox.refresh();
         }
     });
+    this.categories.buttons.forEach(categ => {
+        categ.color = new Color(30, 30, 30, 1)
+    })
     this.selectedCategories = [];
     this.category = [];
     this.categories.refresh();
@@ -5415,6 +5422,8 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
             checkBox.refresh();
         }
     });
+    this.partiallySelectCategory();
+    //this.world().hidePalette = this.categories
 };
 
 // BlockVisibilityDialogMorph ops
