@@ -5212,6 +5212,7 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
                 if (block.category === category) {
                     if (!this.selectedCategories.includes(category)) {
                         this.selection.push(block);
+                        currCategory.userState = 'pressed';
                         block.parent.refresh();
                     } else {
                         this.selection = this.removeItem(block, this.selection);
@@ -5234,7 +5235,7 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
                 currCateg = this.categories.buttons.find(elem => 
                     elem.label.text.toLowerCase() === categ)
                 currCateg.userState = 'pressed';
-                this.category = categ;
+                //this.category = categ;
             });
             this.parent.hidePalette = this;
             //currCategory.userState = 'normal';
@@ -5303,32 +5304,49 @@ BlockVisibilityDialogMorph.prototype.partiallySelectCategory = function () {
     this.categories.buttons.forEach(categ => {
         var categName = categ.label.text.toLowerCase();
         blocksInCategory = this.selection.filter(block => categName === block.category)
-        console.log(this.selection)
+        blocksThatExistInCategory = this.blocks.filter(block => categName === block.category)
         if (blocksInCategory.length != 0) {
-            if (blocksInCategory.length === this.countBlocksInCategories[index]) {
+            //if (blocksInCategory.length === this.countBlocksInCategories[index]) {
+            if (blocksInCategory.length === blocksThatExistInCategory.length) {
                 if (!this.selectedCategories.includes(categName)) this.selectedCategories.push(categName)
-                categ.color = new Color(30, 30, 30, 1)
+                if (this.partiallySelectedCategories.includes(categName)) {
+                    this.partiallySelectedCategories = this.removeItem(categName, this.partiallySelectedCategories)
+                }
+                console.log("pi")
             } else {
-                console.log('hello')
-                this.partiallySelectedCategories.push(categName);
-                //categ.userState = "highlight"
-                categ.color = new Color(68,68,68,1);
+                //this.partiallySelectedCategories.push(categName);
+                if (!this.partiallySelectedCategories.includes(categName)) this.partiallySelectedCategories.push(categName)
+                categ.color = new Color(100,100,100,1);
+                categ.userState = "highlight"
+                categ.state = false
+                this.category = null
                 if (this.selectedCategories.includes(categName)) {
                     this.selectedCategories = this.removeItem(categName, this.selectedCategories)
                 }
+                console.log("mod")
+                categ.refresh()
             }
         } else {
             categ.color = new Color(30, 30, 30, 1)
             categ.userState = "normal"
             //might need to remove categ from selectedCategories?
+            //if (this.partiallySelectedCategories.includes(categName)) {
+            //    this.partiallySelectCategories = this.removeItem(categName, this.partiallySelectCategories)
+            //}
+            if (this.selectedCategories.includes(categName)) {
+                this.selectedCategories = this.removeItem(categName, this.selectedCategories)
+            }
+            console.log('empty')
         }
         categ.rerender();
         categ.fixLayout();
+        categ.refresh();
         index += 1;   
     //for each category filter blocks that equal 
     //category in selection then see if equal to count in countBlocks
     });
     this.categories.fixLayout();
+    this.categories.refresh();
 }
 
 // BlockVisibilityDialogMorph menu
@@ -5351,14 +5369,13 @@ BlockVisibilityDialogMorph.prototype.selectAll = function () {
         }
     });
     this.categories.buttons.forEach(categ => {
-        console.log(categ);
         var categLower = categ.children[0].text.toLowerCase();
         this.selectedCategories.push(categLower);
-        this.category = this.selectedCategories
+        this.category = this.selectedCategories[this.selectedCategories.length-1]
         categ.userState = "pressed"
+        categ.state = true
     });
     this.fixLayout();
-    
 };
 
 
@@ -5366,6 +5383,7 @@ BlockVisibilityDialogMorph.prototype.selectAll = function () {
 // then performing the category of the button? - therefore logic is consistent
 BlockVisibilityDialogMorph.prototype.selectNone = function () {
     this.selection = [];
+    this.category = null
     this.body.contents.children.forEach(checkBox => {
         if (!(checkBox instanceof BoxMorph)) {
             checkBox.refresh();
@@ -5419,6 +5437,7 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
         if (!(checkBox instanceof BoxMorph)) {
             checkBox.refresh();
         }
+        
     });
 };
 
