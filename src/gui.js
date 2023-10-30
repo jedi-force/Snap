@@ -5152,7 +5152,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
                 y += button.height();
             }
         });
-
+        x = 0;
         frame.contents.children.forEach(function (icon) {
               icon.setPosition(fp.add(new Point(x, y + 30)));
             x += icon.width();
