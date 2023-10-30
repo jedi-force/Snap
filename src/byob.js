@@ -5068,6 +5068,7 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
         this.category = target.world().hidePalette.category;
         this.selectedCategories = target.world().hidePalette.selectedCategories;
         this.bounds = target.world().hidePalette.bounds;
+        this.partiallySelectedCategories = target.world().hidePalette.partiallySelectedCategories
     } else {
         target.world().hidePalette = this;
         this.setExtent(new Point(220, 300))
@@ -5207,25 +5208,41 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
             // });
 
             // this.categories.refresh();
-            currCategory.color = new Color(30, 30, 30, 1)
-            this.blocks.forEach (block => {
-                if (block.category === category) {
-                    if (!this.selectedCategories.includes(category)) {
-                        this.selection.push(block);
-                        currCategory.userState = 'pressed';
-                        block.parent.refresh();
-                    } else {
-                        this.selection = this.removeItem(block, this.selection);
-                        currCategory.userState = 'normal';
-                        block.parent.refresh();
-                        this.category = null;
-                        //currCategory.rerender();
-                        //currCategory.refresh();
-                        
-    
+            //currCategory.color = new Color(30, 30, 30, 1)
+            //this.blocks.forEach (block => {
+                //if (block.category === category) {
+            if (!this.selectedCategories.includes(category)) {
+                //this.selection.push(block);
+                currCategory.userState = 'pressed';
+                //block.parent.refresh();
+                currCategory.color = currCategory.pressColor
+                currCategory.state = true
+                this.blocks.forEach (block => {
+                    if (block.category === category) {
+                        this.selection.push(block)
+                        console.log("added block")
+                        block.parent.refresh()
                     }
-                }
-            })
+                })
+            } else {
+                //this.selection = this.removeItem(block, this.selection);
+                currCategory.userState = 'normal';
+                //block.parent.refresh();
+                this.category = null;
+                currCategory.color = new Color(30, 30, 30, 1)
+                currCategory.state = false
+                //currCategory.rerender();
+                //currCategory.refresh();
+                this.blocks.forEach (block => {
+                    if (block.category === category) {
+                        this.selection = this.removeItem(block, this.selection)
+                        console.log("remove block")
+                        block.parent.refresh()
+                    }
+                })
+            }
+                //}
+            //})
             if (!this.selectedCategories.includes(category)) {
                 this.selectedCategories.push(category);
             } else {
@@ -5312,6 +5329,10 @@ BlockVisibilityDialogMorph.prototype.partiallySelectCategory = function () {
                 if (this.partiallySelectedCategories.includes(categName)) {
                     this.partiallySelectedCategories = this.removeItem(categName, this.partiallySelectedCategories)
                 }
+                categ.userState = "pressed"
+                categ.state = true
+                this.category = categName
+                categ.color = categ.pressColor
                 console.log("pi")
             } else {
                 //this.partiallySelectedCategories.push(categName);
@@ -5374,6 +5395,7 @@ BlockVisibilityDialogMorph.prototype.selectAll = function () {
         this.category = this.selectedCategories[this.selectedCategories.length-1]
         categ.userState = "pressed"
         categ.state = true
+        categ.color = categ.pressColor
     });
     this.fixLayout();
 };
@@ -5391,9 +5413,12 @@ BlockVisibilityDialogMorph.prototype.selectNone = function () {
     });
     this.categories.buttons.forEach(categ => {
         categ.color = new Color(30, 30, 30, 1)
+        categ.state = false
+        categ.userState = "normal"
     })
+    this.partiallySelectedCategories = []
     this.selectedCategories = [];
-    this.category = [];
+    this.category = null
     this.categories.refresh();
 };
 
