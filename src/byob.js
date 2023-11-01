@@ -5068,7 +5068,8 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
         this.category = target.world().hidePalette.category;
         this.selectedCategories = target.world().hidePalette.selectedCategories;
         this.bounds = target.world().hidePalette.bounds;
-        this.partiallySelectedCategories = target.world().hidePalette.partiallySelectedCategories
+        this.partiallySelectedCategories = target.world().hidePalette.partiallySelectedCategories;
+        this.refreshCategories();
     } else {
         target.world().hidePalette = this;
         this.setExtent(new Point(220, 300))
@@ -5171,6 +5172,7 @@ BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
 
     //might need to adjust cancel so that it reverts back to previous world.hidePalette morph
     //and would also need to adjust okay so that it only applies after ok button
+    this.refreshCategories();
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
     this.fixLayout();
@@ -5315,6 +5317,32 @@ BlockVisibilityDialogMorph.prototype.countBocksInCategories = function () {
     })
 }
 
+BlockVisibilityDialogMorph.prototype.refreshCategories = function () {
+    console.log(this.selectedCategories)
+    console.log(this.selectedCategories[0])
+    
+    this.categories.buttons.forEach(categ => {
+        if (this.partiallySelectedCategories.includes(categ.labelString.toLowerCase())) {
+            categ.color = new Color(100,100,100,1);
+            categ.userState = "highlight"
+            categ.state = false
+            this.category = null
+        } else if (this.selectedCategories.includes(categ.labelString.toLowerCase())) {
+            categ.userState = "pressed"
+            categ.state = true
+            this.category = categ.labelString
+            categ.color = categ.pressColor
+        } else {
+            categ.color = new Color(30, 30, 30, 1)
+            categ.userState = "normal"
+            categ.state = false
+        }
+        categ.refresh();
+        categ.fixLayout();
+        this.fixLayout();
+    });
+}
+
 BlockVisibilityDialogMorph.prototype.partiallySelectCategory = function () {
     var index = 0;
     this.countBocksInCategories();
@@ -5350,6 +5378,7 @@ BlockVisibilityDialogMorph.prototype.partiallySelectCategory = function () {
         } else {
             categ.color = new Color(30, 30, 30, 1)
             categ.userState = "normal"
+            categ.state = false
             //might need to remove categ from selectedCategories?
             //if (this.partiallySelectedCategories.includes(categName)) {
             //    this.partiallySelectCategories = this.removeItem(categName, this.partiallySelectCategories)
