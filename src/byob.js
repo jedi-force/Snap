@@ -5071,7 +5071,6 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
         this.partiallySelectedCategories = target.world().hidePalette.partiallySelectedCategories;
         this.refreshCategories();
     } else {
-        target.world().hidePalette = this;
         this.setExtent(new Point(220, 300))
     }
     // override inherited properites:
@@ -5515,6 +5514,33 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
         'palette',
         'hide block'
     );
+};
+
+
+BlockVisibilityDialogMorph.prototype.ok = function () {
+    //this.target.world().hidePalette = this;
+    if (this.target.world().hidePalette === null) {
+        this.target.world().hidePalette = new BlockVisibilityDialogMorph(this.target)
+    }
+    this.target.world().hidePalette.categories = this.categories
+    this.target.world().hidePalette.category = this.category;
+    this.target.world().hidePalette.selectedCategories = this.selectedCategories;
+    this.target.world().hidePalette.partiallySelectedCategories = this.partiallySelectedCategories
+    this.target.world().hidePalette.bounds = this.bounds
+    //this.refreshCategories()
+    this.accept();
+};
+
+BlockVisibilityDialogMorph.prototype.cancel = function () {
+    if (this.target.world().hidePalette != null) {
+        this.categories = this.target.world().hidePalette.categories;
+        this.category = this.target.world().hidePalette.category;
+        this.selectedCategories = this.target.world().hidePalette.selectedCategories;
+        //this.bounds = this.target.world().hidePalette.bounds;
+        this.partiallySelectedCategories = this.target.world().hidePalette.partiallySelectedCategories;
+        //this.refreshCategories();
+    }
+    this.destroy();
 };
 
 // BlockVisibilityDialogMorph layout
