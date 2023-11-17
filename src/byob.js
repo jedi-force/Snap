@@ -5299,6 +5299,17 @@ BlockVisibilityDialogMorph.prototype.popUp = function (wrrld) {
             this.corner,
             this.corner
         );
+        // this.handle.dblclick = function () { 
+        //     console.log(this)
+        //     console.log(this.handle)
+        //     console.log(this.width())
+        //     this.setWidth(this.width()*2)
+        //     this.setheight(this.height()*2)
+        //     this.changed()
+        //     console.log(this.width())
+        // }
+        // this.IDE_Morph.addEventListener("dblclick", this.handle.dblclick)
+           
         this.selectedCategories.forEach(categ => {
             currCateg = this.categories.buttons.find(elem => 
                 elem.label.text.toLowerCase() === categ)
@@ -5468,7 +5479,7 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
                 uPrim.push(b.selector);
             }
         } else {
-            this.partiallySelectCategory();
+            //this.partiallySelectCategory();
         }
     });
 
@@ -5492,7 +5503,7 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
         }
         
     });
-    //this.partiallySelectCategory();
+    this.partiallySelectCategory();
 };
 
 // BlockVisibilityDialogMorph ops
@@ -5523,13 +5534,14 @@ BlockVisibilityDialogMorph.prototype.ok = function () {
     if (this.target.world().hidePalette === null) {
         this.target.world().hidePalette = new BlockVisibilityDialogMorph(this.target)
     }
-    this.target.world().hidePalette.categories.children = Object.create(this.categories.children)
-    this.target.world().hidePalette.category = structuredClone(this.category);
-    this.target.world().hidePalette.selectedCategories = Object.create(this.selectedCategories);
-    this.target.world().hidePalette.partiallySelectedCategories = Object.create(this.partiallySelectedCategories)
-    this.target.world().hidePalette.bounds = Object.create(this.bounds)
+    // this.target.world().hidePalette.categories.children = Object.create(this.categories.children)
+    // this.target.world().hidePalette.category = structuredClone(this.category);
+    // this.target.world().hidePalette.selectedCategories = Object.create(this.selectedCategories);
+    // this.target.world().hidePalette.partiallySelectedCategories = Object.create(this.partiallySelectedCategories)
+    // this.target.world().hidePalette.bounds = Object.create(this.bounds)
     // //this.refreshCategories()
     //this.target.world().hidePalette = Object.create(this)
+    this.target.world().hidePalette = Object.create(this)
     this.accept();
 };
 
