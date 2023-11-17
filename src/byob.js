@@ -5064,11 +5064,11 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
         null // environment
     );
     if (target.world().hidePalette != null) {
-        this.categories = target.world().hidePalette.categories;
-        this.category = target.world().hidePalette.category;
-        this.selectedCategories = target.world().hidePalette.selectedCategories;
-        this.bounds = target.world().hidePalette.bounds;
-        this.partiallySelectedCategories = target.world().hidePalette.partiallySelectedCategories;
+        this.categories = Object.create(target.world().hidePalette.categories);
+        this.category = structuredClone(target.world().hidePalette.category);
+        this.selectedCategories = Object.create(target.world().hidePalette.selectedCategories);
+        this.bounds = Object.create(target.world().hidePalette.bounds);
+        this.partiallySelectedCategories = Object.create(target.world().hidePalette.partiallySelectedCategories);
         this.refreshCategories();
     } else {
         this.setExtent(new Point(220, 300))
@@ -5255,7 +5255,7 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
                 currCateg.userState = 'pressed';
                 //this.category = categ;
             });
-            this.parent.hidePalette = this;
+            //this.parent.hidePalette = this;
             //currCategory.userState = 'normal';
             //this.categories.rerender();
             //this.categories.refresh();
@@ -5492,6 +5492,7 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
         }
         
     });
+    //this.partiallySelectCategory();
 };
 
 // BlockVisibilityDialogMorph ops
@@ -5522,24 +5523,27 @@ BlockVisibilityDialogMorph.prototype.ok = function () {
     if (this.target.world().hidePalette === null) {
         this.target.world().hidePalette = new BlockVisibilityDialogMorph(this.target)
     }
-    this.target.world().hidePalette.categories = this.categories
-    this.target.world().hidePalette.category = this.category;
-    this.target.world().hidePalette.selectedCategories = this.selectedCategories;
-    this.target.world().hidePalette.partiallySelectedCategories = this.partiallySelectedCategories
-    this.target.world().hidePalette.bounds = this.bounds
-    //this.refreshCategories()
+    this.target.world().hidePalette.categories.children = Object.create(this.categories.children)
+    this.target.world().hidePalette.category = structuredClone(this.category);
+    this.target.world().hidePalette.selectedCategories = Object.create(this.selectedCategories);
+    this.target.world().hidePalette.partiallySelectedCategories = Object.create(this.partiallySelectedCategories)
+    this.target.world().hidePalette.bounds = Object.create(this.bounds)
+    // //this.refreshCategories()
+    //this.target.world().hidePalette = Object.create(this)
     this.accept();
 };
 
 BlockVisibilityDialogMorph.prototype.cancel = function () {
-    if (this.target.world().hidePalette != null) {
-        this.categories = this.target.world().hidePalette.categories;
-        this.category = this.target.world().hidePalette.category;
-        this.selectedCategories = this.target.world().hidePalette.selectedCategories;
-        //this.bounds = this.target.world().hidePalette.bounds;
-        this.partiallySelectedCategories = this.target.world().hidePalette.partiallySelectedCategories;
-        //this.refreshCategories();
-    }
+    // if (this.target.world().hidePalette != null) {
+    //     this.categories = this.target.world().hidePalette.categories;
+    //     this.category = this.target.world().hidePalette.category;
+    //     this.selectedCategories = this.target.world().hidePalette.selectedCategories;
+    //     this.bounds = this.target.world().hidePalette.bounds;
+    //     this.partiallySelectedCategories = this.target.world().hidePalette.partiallySelectedCategories;
+    //     this.bounds = this.target.world().hidePalette.bounds 
+    //     //this.refreshCategories();
+    //     //this.fixLayout();
+    //}
     this.destroy();
 };
 
