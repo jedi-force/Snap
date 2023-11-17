@@ -5273,8 +5273,6 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
         ],
         button;
 
-        //vic added to create a unchecking and checking action for the checkboxes when clicking category
-
     button = new ToggleButtonMorph(
         colors,
         this, // this block dialog box is the target
@@ -5282,43 +5280,25 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
             this.category = category
             currCategory = this.categories.buttons.find(elem => 
                 elem.label.text.toLowerCase() === category)
-
-            // this.category.forEach(categ => {
-            //     currCateg = this.categories.buttons.find(elem => 
-            //         elem.label.text.toLowerCase() === categ)
-            //     currCateg.userState = 'pressed';
-            // });
-
-            // this.categories.refresh();
-            //currCategory.color = new Color(30, 30, 30, 1)
-            //this.blocks.forEach (block => {
-                //if (block.category === category) {
             if (!this.selectedCategories.includes(category)) {
-                //this.selection.push(block);
                 currCategory.userState = 'pressed';
-                //block.parent.refresh();
                 currCategory.color = currCategory.pressColor
                 currCategory.state = true
                 this.blocks.forEach (block => {
                     if (block.category === category) {
                         this.selection.push(block)
-                        console.log("added block")
                         block.parent.refresh()
                     }
                 })
             } else {
-                //this.selection = this.removeItem(block, this.selection);
                 currCategory.userState = 'normal';
-                //block.parent.refresh();
                 this.category = null;
                 currCategory.color = new Color(30, 30, 30, 1)
                 currCategory.state = false
-                //currCategory.rerender();
-                //currCategory.refresh();
+
                 this.blocks.forEach (block => {
                     if (block.category === category) {
                         this.selection = this.removeItem(block, this.selection)
-                        console.log("remove block")
                         block.parent.refresh()
                     }
                 })
@@ -5334,12 +5314,7 @@ BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
                 currCateg = this.categories.buttons.find(elem => 
                     elem.label.text.toLowerCase() === categ)
                 currCateg.userState = 'pressed';
-                //this.category = categ;
             });
-            //this.parent.hidePalette = this;
-            //currCategory.userState = 'normal';
-            //this.categories.rerender();
-            //this.categories.refresh();
         },
         category[0].toUpperCase().concat(category.slice(1)), // UCase label
         () => this.category === category, // query
@@ -5380,16 +5355,6 @@ BlockVisibilityDialogMorph.prototype.popUp = function (wrrld) {
             this.corner,
             this.corner
         );
-        // this.handle.dblclick = function () { 
-        //     console.log(this)
-        //     console.log(this.handle)
-        //     console.log(this.width())
-        //     this.setWidth(this.width()*2)
-        //     this.setheight(this.height()*2)
-        //     this.changed()
-        //     console.log(this.width())
-        // }
-        // this.IDE_Morph.addEventListener("dblclick", this.handle.dblclick)
            
         this.selectedCategories.forEach(categ => {
             currCateg = this.categories.buttons.find(elem => 
@@ -5409,9 +5374,6 @@ BlockVisibilityDialogMorph.prototype.countBocksInCategories = function () {
 }
 
 BlockVisibilityDialogMorph.prototype.refreshCategories = function () {
-    console.log(this.selectedCategories)
-    console.log(this.selectedCategories[0])
-    
     this.categories.buttons.forEach(categ => {
         if (this.partiallySelectedCategories.includes(categ.labelString.toLowerCase())) {
             categ.color = new Color(100,100,100,1);
@@ -5442,7 +5404,6 @@ BlockVisibilityDialogMorph.prototype.partiallySelectCategory = function () {
         blocksInCategory = this.selection.filter(block => categName === block.category)
         blocksThatExistInCategory = this.blocks.filter(block => categName === block.category)
         if (blocksInCategory.length != 0) {
-            //if (blocksInCategory.length === this.countBlocksInCategories[index]) {
             if (blocksInCategory.length === blocksThatExistInCategory.length) {
                 if (!this.selectedCategories.includes(categName)) this.selectedCategories.push(categName)
                 if (this.partiallySelectedCategories.includes(categName)) {
@@ -5452,9 +5413,7 @@ BlockVisibilityDialogMorph.prototype.partiallySelectCategory = function () {
                 categ.state = true
                 this.category = categName
                 categ.color = categ.pressColor
-                console.log("pi")
             } else {
-                //this.partiallySelectedCategories.push(categName);
                 if (!this.partiallySelectedCategories.includes(categName)) this.partiallySelectedCategories.push(categName)
                 categ.color = new Color(100,100,100,1);
                 categ.userState = "highlight"
@@ -5463,28 +5422,20 @@ BlockVisibilityDialogMorph.prototype.partiallySelectCategory = function () {
                 if (this.selectedCategories.includes(categName)) {
                     this.selectedCategories = this.removeItem(categName, this.selectedCategories)
                 }
-                console.log("mod")
                 categ.refresh()
             }
         } else {
             categ.color = new Color(30, 30, 30, 1)
             categ.userState = "normal"
             categ.state = false
-            //might need to remove categ from selectedCategories?
-            //if (this.partiallySelectedCategories.includes(categName)) {
-            //    this.partiallySelectCategories = this.removeItem(categName, this.partiallySelectCategories)
-            //}
             if (this.selectedCategories.includes(categName)) {
                 this.selectedCategories = this.removeItem(categName, this.selectedCategories)
             }
-            console.log('empty')
         }
         categ.rerender();
         categ.fixLayout();
         categ.refresh();
         index += 1;   
-    //for each category filter blocks that equal 
-    //category in selection then see if equal to count in countBlocks
     });
     this.categories.fixLayout();
     this.categories.refresh();
@@ -5520,9 +5471,6 @@ BlockVisibilityDialogMorph.prototype.selectAll = function () {
     this.fixLayout();
 };
 
-
-// vic - would it be better to change to the iterating through each category
-// then performing the category of the button? - therefore logic is consistent
 BlockVisibilityDialogMorph.prototype.selectNone = function () {
     this.selection = [];
     this.category = null
@@ -5560,7 +5508,6 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
                 uPrim.push(b.selector);
             }
         } else {
-            //this.partiallySelectCategory();
         }
     });
 
@@ -5590,7 +5537,6 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
 // BlockVisibilityDialogMorph ops
 
 BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
-    //this.parent.hidePalette.bounds = this.bounds; //saving the current hide palette bounds to the world hidePalette variable
     var ide = this.target.parentThatIsA(IDE_Morph);
     this.blocks.forEach(block => this.target.changeBlockVisibility(
         block,
@@ -5611,32 +5557,11 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
 
 
 BlockVisibilityDialogMorph.prototype.ok = function () {
-    //this.target.world().hidePalette = this;
-    if (this.target.world().hidePalette === null) {
-        this.target.world().hidePalette = new BlockVisibilityDialogMorph(this.target)
-    }
-    // this.target.world().hidePalette.categories.children = Object.create(this.categories.children)
-    // this.target.world().hidePalette.category = structuredClone(this.category);
-    // this.target.world().hidePalette.selectedCategories = Object.create(this.selectedCategories);
-    // this.target.world().hidePalette.partiallySelectedCategories = Object.create(this.partiallySelectedCategories)
-    // this.target.world().hidePalette.bounds = Object.create(this.bounds)
-    // //this.refreshCategories()
-    //this.target.world().hidePalette = Object.create(this)
     this.target.world().hidePalette = Object.create(this)
     this.accept();
 };
 
 BlockVisibilityDialogMorph.prototype.cancel = function () {
-    // if (this.target.world().hidePalette != null) {
-    //     this.categories = this.target.world().hidePalette.categories;
-    //     this.category = this.target.world().hidePalette.category;
-    //     this.selectedCategories = this.target.world().hidePalette.selectedCategories;
-    //     this.bounds = this.target.world().hidePalette.bounds;
-    //     this.partiallySelectedCategories = this.target.world().hidePalette.partiallySelectedCategories;
-    //     this.bounds = this.target.world().hidePalette.bounds 
-    //     //this.refreshCategories();
-    //     //this.fixLayout();
-    //}
     this.destroy();
 };
 

@@ -5102,8 +5102,6 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     dialog.loadCategory = function () {
     
         filteredItems = items.filter(item => item.category === label)
-        console.log(filteredItems)
-        console.log(label)
     };
     dialog.fixLayout = function () {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
