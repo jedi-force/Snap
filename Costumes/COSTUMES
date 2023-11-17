@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 abby-a.svg	abby a
 abby-b.svg	abby b
 abby-c.svg	abby c
@@ -273,6 +274,8 @@ frog.svg	frog
 fruit_platter.png	fruit platter
 fruitsalad.svg	fruitsalad
 =======
+=======
+>>>>>>> remotes/origin/hideBlocksPalette
 abby-a.svg	abby a  person
 abby-b.svg	abby b  person
 abby-c.svg	abby c  person
@@ -538,6 +541,7 @@ football_standing.png	football standing   sports
 fortunecookie.png	fortunecookie   food
 fox.svg	fox animal
 frog.svg	frog    animal
+<<<<<<< HEAD
 fruit_platter.png	fruit platter   animal
 fruitsalad.svg	fruitsalad  animal
 >>>>>>> 320a708e (playing around with costume menu and added categories to COSTUMES.txt)
@@ -807,3 +811,267 @@ witch.svg	witch
 wizard1.svg	wizard1
 wizard2.svg	wizard2
 wizard.svg	wizard
+=======
+fruit_platter.png	fruit platter   food
+fruitsalad.svg	fruitsalad  food
+ghost1_.svg	ghost1 character
+ghost2-a.svg	ghost2 a    character
+ghost2-b.svg	ghost2 b    character
+ghoul-a.svg	ghoul a character
+ghoul-b.svg	ghoul b character
+gift-a.svg	gift a  object
+gift-b.svg	gift b  object
+girl1-standing.gif	girl1 standing  person
+girl1-walking.gif	girl1 walking   person
+girl2-shouting.gif	girl2 shouting  person
+girl2-standing.gif	girl2 standing  person
+girl3-basketball.gif	girl3 basketball    person
+girl3-running.gif	girl3 running   person
+girl3-standing.gif	girl3 standing  person
+glasses.svg	glasses accessory
+glass_water-a.svg	glass water a   drink
+glass_water-b.svg	glass water b   drink
+green_flag.svg	green flag  object
+guitar_bass.svg	guitar bass music
+guitar_electric.svg	guitar electric music
+guitar.svg	guitar  music
+hannah-a.png	hannah a    person
+hannah-b.png	hannah b    person
+hannah-c.png	hannah c    person
+hat_beanie.svg	hat beanie  accessory
+hat_party2-a.svg	hat party2 a    accessory
+Hat.svg	Hat accessory
+hat_winter.svg	hat winter  accessory
+hat_wizard.svg	hat wizard  character
+headband.svg	headband    accessory
+heart_code.svg	heart code  object
+heart_face.svg	heart face  object
+heart_love_it.svg	heart love it   object
+heart_purple.svg	heart purple    object
+heart_red.svg	heart red   object
+heart_smile.svg	heart smile object
+heart_sweet.svg	heart sweet object
+helicopter.png	helicopter  transportation
+hippo1-a.svg	hippo1 a    animal
+hippo1-b.svg	hippo1 b    animal
+holly1.svg	holly1  object
+holly2.svg	holly2  object
+home_button.svg	home button object
+horse1-a.svg	horse1 a    animal
+horse1-b.svg	horse1 b    animal
+jahrd01.png	jahrd a character
+jahrd02.png	jahrd b character
+jahrd03.png	jahrd c character
+jahrd04.png	jahrd d character
+jahrd05.png	jahrd e character
+jahrd06.png	jahrd f character
+jaime-a.png	jaime a person
+jaime-b.png	jaime b person
+jaime_walking-a.png	jaime walking a person
+jaime_walking-b.png	jaime walking b person
+jaime_walking-c.png	jaime walking c person
+jaime_walking-d.png	jaime walking d person
+jaime_walking-e.png	jaime walking e person
+jamet01.png	jamet a character
+jamet02.png	jamet b character
+jamet03.png	jamet c character
+jamet04.png	jamet d character
+jamet05.png	jamet e character
+jamet06.png	jamet f character
+jamet06-wall.png	jamet f's wall  object
+jay.gif	jay person
+jeans-a.svg	jeans a accessory
+jeans-b.svg	jeans b accessory
+jodi.gif	jodi    person
+jo_pop_down.png	jo pop down person
+jo_pop_front.png	jo pop front    person
+jo_pop_L_arm.png	jo pop L arm    person
+jo_pop_left.png	jo pop left person
+jo_pop_R_arm.png	jo pop R arm    person
+jo_pop_right.png	jo pop right    person
+jo_pop_stand.png	jo pop stand    person
+jo_stance.png	jo stance   person
+jo_top_L_cross.png	jo top L cross  person
+jo_top_L_leg.png	jo top L leg    person
+jo_top_R_cross.png	jo top R cross  person
+jo_top_R_leg.png	jo top R leg    person
+jo_top_stand.png	jo top stand    person
+keyboard-a.svg	keyboard a  music
+keyboard-b.svg	keyboard b  music
+keyboard-c.svg	keyboard c  music
+keyboard-d.svg	keyboard d  music
+key.svg	key object
+khalid-a.png	khalid a    person
+Khalid-b.png	Khalid b    person
+khalid-c.png	khalid c    person
+khalid-d.png	khalid d    person
+knight.svg	knight  character
+ladybug2-a.svg	ladybug2 a  animal
+ladybug2-b.svg	ladybug2 b  animal
+ladybug2.svg	ladybug2    animal
+lamp.png	lamp    object
+laptop.svg	laptop  object
+lb_pop_down.png	lb pop down person
+lb_pop_front.png	lb pop front    person
+lb_pop_L_arm.png	lb pop L arm    person
+lb_pop_left.png	lb pop left person
+lb_pop_R_arm.png	lb pop R arm    person
+lb_pop_right.png	lb pop right    person
+lb_pop_stand.png	lb pop stand    person
+lb_stance.png	lb stance   person
+lb_top_L_cross.png	lb top L cross  person
+lb_top_L_leg.png	lb top L leg    person
+lb_top_R_cross.png	lb top R cross  person
+lb_top_R_leg.png	lb top R leg    person
+lb_top_stand.png	lb top stand    person
+lightning.svg	lightning   object
+lion-a.svg	lion a  animal
+lion-b.svg	lion b  animal
+lioness.svg	lioness animal
+lorenz01.png	lorenz01    person
+lorenz02.png	lorenz02    person
+lorenz03.png	lorenz03    person
+lorenz04.png	lorenz04    person
+lorenz05.png	lorenz05    person
+lorenz06.png	lorenz06    person
+lorenz07b.png	lorenz07b   person
+lorenz07.png	lorenz07    person
+magiccarpet.png	magiccarpet object
+magicwand.svg	magicwand   object
+marble-building.png	marble building place
+marissa-crouching.gif	marissa crouching   person
+marissa.gif	marissa person
+marissa-sitting.gif	marissa sitting person
+maya.png	maya    person
+microphonestand.svg	microphonestand object
+microphone.svg	microphone  object
+monkey1-a.svg	monkey1 a   animal
+monkey1-b.svg	monkey1 b   animal
+monkey2-a.svg	monkey2 a   animal
+monkey2-b.svg	monkey2 b   animal
+monkey2-c.svg	monkey2 c   animal
+mori.png	mori    person
+mouse1-a.svg	mouse1 a    animal
+mouse1-b.svg	mouse1 b    animal
+muffin-a.svg	muffin a    food
+muffin-b.svg	muffin b    food
+octopus-a.svg	octopus a   animal
+octopus-b.svg	octopus b   animal
+orange2-a.svg	orange2 a   food
+orange2-b.svg	orange2 b   food
+orange2-c.svg	orange2 c   food
+orange.svg	orange  food
+paddle.svg	paddle  sports
+palmtree.gif	palmtree    object
+parrot2-a.svg	parrot2 a   animal
+parrot2-b.svg	parrot2 b   animal
+parrot-a.svg	parrot a    animal
+parrot-b.svg	parrot b    animal
+partyhat1.svg	partyhat1   accessory
+paul.gif	paul    person
+pencil-a.svg	pencil a    object
+pencil-b.svg	pencil b    object
+penguin1.svg	penguin1    animal
+penguin1_talk-a.svg	penguin1 talk a animal
+penguin1_talk-b.svg	penguin1 talk b animal
+penguin2.svg	penguin2    animal
+penguin2_talk-a.svg	penguin2 talk a animal
+penguin2_talk-b.svg	penguin2 talk b animal
+penguin3-a.svg	penguin3 a  animal
+penguin3-b.svg	penguin3 b  animal
+penguin3-c.svg	penguin3 c  animal
+piano.svg	piano   music
+planet2.svg	planet2 object
+princess.svg	princess    character
+prince.svg	prince  character
+rainbow.svg	rainbow object
+referee.gif	referee character
+reindeer.svg	reindeer    animal
+robot1.svg	robot1  character
+rocks.svg	rocks   object
+rory.png	rory    person
+ruby-a.png	ruby a  person
+ruby-b.png	ruby b  person
+sail-boat.png	sail boat   transportation
+sam.gif	sam person
+saxophone-a.svg	saxophone a music
+saxophone-b.svg	saxophone b music
+scarf1.svg	scarf1  accessory
+scarf2.svg	scarf2  accessory
+shark-a_.svg	shark a animal
+shark-b_.svg	shark b animal
+shark-c_.svg	shark c animal
+shirt2-a2.svg	shirt2 a2   accessory
+shirt2-a.svg	shirt2 a    accessory
+shirt-a.svg	shirt a accessory
+shirt_blouse.svg	shirt blouse    accessory
+shirt-b.svg	shirt b accessory
+shirt_collar-a.svg	shirt collar a  accessory
+shirt_collar-b.svg	shirt collar b  accessory
+shirt_collar-c.svg	shirt collar c  accessory
+shoes1.svg	shoes1  accessory
+shoes2.svg	shoes2  accessory
+Singer1.svg	Singer1 character
+skates.svg	skates  sports
+sl_pop_L_arm.png	sl pop L arm    person
+sl_pop_R_arm.png	sl pop R arm    person
+sl_top_L_cross.png	sl top L cross  person
+sl_top_L_leg.png	sl top L leg    person
+sl_top_R_cross.png	sl top R cross  person
+sl_top_ready.png	sl top ready    person
+sl_top_R_leg.png	sl top R leg    person
+sl_top_stand.png	sl top stand    person
+snowflake.svg	snowflake   object
+snowman.svg	snowman character
+spaceship-a.svg	spaceship a transportation
+spaceship-b.svg	spaceship b transportation
+speaker.svg	speaker object
+squirrel1.png	squirrel1   animal
+star1.svg	star1   object
+star2.svg	star2   object
+star3-a.svg	star3 a object
+star3-b.svg	star3 b object
+starfish-a.svg	starfish a  animal
+starfish-b_.svg	starfish b  animal
+stop.svg	stop    object
+street-cleaner-mit.png	street cleaner mit  transportation
+sunglasses1.svg	sunglasses1 accessory
+sunglasses2.svg	sunglasses2 accessory
+sun.svg	sun object
+tabla-a.svg	tabla a object
+tabla-b.svg	tabla b object
+taco-a.svg	taco a  food
+taco-b.svg	taco b  food
+tennisball.png	tennisball  sports
+trampoline.png	trampoline  sports
+tree1.svg	tree1   object
+tree2.svg	tree2   object
+tree-lights-a.svg	tree lights a   object
+tree-lights-b.svg	tree lights b   object
+trees-a.svg	trees a object
+trees-b.svg	trees b object
+trombone-a.svg	trombone a  music
+trombone-b.svg	trombone b  music
+trumpet-a2.svg	trumpet a2  music
+trumpet-a.svg	trumpet a   music
+turtle01_colour.png	Tad 1   character
+turtle02_colour_resized.png	Tad 2   character
+turtle03.png	Tad 3   character
+turtle04.png	Tad 4   character
+turtle05.png	Tad 5   character
+turtle06.png	Tad 6   character
+ukulele.svg	ukulele character
+umbrella.png	umbrella    object
+unicorn1.png	unicorn1    animal
+unicorn.svg	unicorn animal
+vest-a.svg	vest a  accessory
+vest-b.svg	vest b  accessory
+wanda.svg	wanda   person
+watermelon-a.svg	watermelon a    food
+watermelon-b.svg	watermelon b    food
+watermelon-c.svg	watermelon c    food
+witch.svg	witch   character
+wizard1.svg	wizard1 character
+wizard2.svg	wizard2 character
+wizard.svg	wizard  character
+>>>>>>> remotes/origin/hideBlocksPalette

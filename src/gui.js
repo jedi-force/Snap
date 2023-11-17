@@ -4982,6 +4982,8 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
         parts = line.split('\t').map(str => str.trim());
 
         if (parts.length < 2) {return; }
+        var whitespace = parts[parts.length - 1].split(/[(\t+)|(\s+)]/);
+        console.log(whitespace[whitespace.length - 1])
 
         items.push({
             fileName: parts[0],
@@ -5065,11 +5067,14 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     frame.contents.acceptsDrops = false;
     frame.color = myself.groupColor;
     frame.fixLayout = nop;
+    frame.add(categorySelector);
+
     dialog.labelString = folderName;
     dialog.createLabel();
     dialog.addBody(frame);
     dialog.addButton('ok', 'Import');
     dialog.addButton('cancel', 'Cancel');
+    dialog.selectedCategory = 'accessory';
 
     dialog.ok = function () {
         if (selectedIcon) {
@@ -5105,7 +5110,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             x = 0,
             y = 0,
             fp, fw;
-        this.buttons.fixLayout();
+        categorySelector.fixLayout();
         this.body.setPosition(this.position().add(new Point(
             this.padding,
             th + this.padding
@@ -5114,10 +5119,21 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             this.width() - this.padding * 2,
             this.height() - this.padding * 3 - th - this.buttons.height()
         ));
+        
         fp = this.body.position();
         fw = this.body.width();
+
+        categorySelector.children.forEach(function (button) {
+            button.setPosition(fp.add(new Point(x, y)));
+            x += button.width();
+            if (x + button.width() > fw) {
+                x = 0;
+                y += button.height();
+            }
+        });
+
         frame.contents.children.forEach(function (icon) {
-              icon.setPosition(fp.add(new Point(x, y)));
+              icon.setPosition(fp.add(new Point(x, y + 30)));
             x += icon.width();
             if (x + icon.width() > fw) {
                 x = 0;
